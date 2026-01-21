@@ -4,7 +4,7 @@ export default function Lab1() {
     <div id="wd-lab1">
       <h2>Lab 1</h2>
       <h4>Daniel Jea</h4>
-        <Link href="https://kambaz-omega.vercel.app/account/signin"
+        <Link href="kambaz-daniel-jeas-projects.vercel.app"
              className="Vercel Link" >
             Vercel Link
           </Link> 
