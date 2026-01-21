@@ -14,19 +14,36 @@ export default function Assignments() {
              className="wd-assignment-link" >
             A1 - ENV + HTML
           </Link> 
-          
+          <div>
+            Multiple Modules | <strong>Not available until</strong> May 6 at 12:00am |
+          </div>
+          <div>
+            <strong>Due</strong> May 13 at 11:59pm | 100 pts
+          </div>
           </li>
         <li className="wd-assignment-list-item">
             <Link href="/courses/1234/assignments/123"
              className="wd-assignment-link" >
             A2 - CSS + BOOTSTRAP
           </Link> 
+          <div>
+            Multiple Modules | <strong>Not available until</strong> May 13 at 12:00am |
+          </div>
+          <div>
+            <strong>Due</strong> May 20 at 11:59pm | 100 pts
+          </div>
           </li>
         <li className="wd-assignment-list-item">
             <Link href="/courses/1234/assignments/123"
              className="wd-assignment-link" >
             A3 - JAVASCRIPT + REACT
           </Link> 
+          <div>
+            Multiple Modules | <strong>Not available until</strong> May 20 at 12:00am |
+          </div>
+          <div>
+            <strong>Due</strong> May 27 at 11:59pm | 100 pts
+          </div>
           </li>
       </ul>
     </div>

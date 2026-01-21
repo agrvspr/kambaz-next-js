@@ -1,7 +1,13 @@
+import Link from "next/link";
 export default function Lab1() {
   return (
     <div id="wd-lab1">
       <h2>Lab 1</h2>
+      <h4>Daniel Jea</h4>
+        <Link href="https://kambaz-omega.vercel.app/account/signin"
+             className="Vercel Link" >
+            Vercel Link
+          </Link> 
       <h3>HTML Examples</h3>
       <div id="wd-h-tag">
         <h4>Heading Tags</h4>
