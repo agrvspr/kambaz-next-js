@@ -18,7 +18,7 @@ export default function Lab1() {
           <p id="wd-p-1"> ... </p>
           <p id="wd-p-2">
 This is the first paragraph. The paragraph tag is used to format
-vertical gaps between long pieces of text like this one.
+vertical gaps between long pieces of text like this one. IM NOT CRAZY
           </p>
           <p id="wd-p-3">
 This is the second paragraph. Even though there is a deliberate white
