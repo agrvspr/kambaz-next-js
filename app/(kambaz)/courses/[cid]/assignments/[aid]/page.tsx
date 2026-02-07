@@ -2,13 +2,15 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Button } from "react-bootstrap";
+import { Button, FormSelect } from "react-bootstrap";
 export default function AssignmentEditor() {
+  /*https://react-bootstrap.netlify.app/docs/forms/checks-radios/ for checkboxes and Form.stuff
+  */
   return (
     <div id="wd-assignments-editor">
-      <Form>x
+      <Form>
         <Form.Group as={Row} className="mb-3" controlId="formAssignmentName">
-          <Form.Label column sm={2}>
+          <Form.Label column sm={4}>
             Assignment Name
           </Form.Label>
           <Col sm={10}>
@@ -20,7 +22,7 @@ export default function AssignmentEditor() {
           <Col sm={12}>
             <Form.Control
               as="textarea"
-              rows={5}
+              rows={6}
               defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Netlify"
             />
           </Col>
@@ -66,12 +68,13 @@ export default function AssignmentEditor() {
             Submission Type
           </Form.Label>
           <Col sm={10}>
+          <div className="border rounded p-3 bg-light">
             <Form.Select defaultValue="Online">
               <option value="Online">Online</option>
               <option value="Offline">Offline</option>
             </Form.Select>
-
-            <div className="mt-3 p-3 border rounded">
+            
+            <div className="mt-3 p-3 rounded">
               <Form.Label className="fw-bold">Online Entry Options</Form.Label>
               
               <Form.Check
@@ -108,6 +111,7 @@ export default function AssignmentEditor() {
                 id="wd-file-upload"
                 label="File Uploads"
               />
+              </div>
             </div>
           </Col>
         </Form.Group>
@@ -117,7 +121,11 @@ export default function AssignmentEditor() {
             Assign to
           </Form.Label>
           <Col sm={10}>
-            <Form.Control type="text" defaultValue="Everyone" />
+            <Form.Select defaultValue="Everyone" className="mb-3">
+              <option value="Everyone">Everyone</option>
+              <option value="Student">Student</option>
+              <option value="Group">Group</option>
+            </Form.Select>            
           </Col>
         </Form.Group>
 
