@@ -1,113 +1,169 @@
+"use client"
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import { Button } from "react-bootstrap";
 export default function AssignmentEditor() {
   return (
     <div id="wd-assignments-editor">
-      <label htmlFor="wd-name">Assignment Name</label>
-      <input id="wd-name" defaultValue="A1 - ENV + HTML" /><br /><br />
-      <textarea id="wd-description">
-        The assignment is available online Submit a link to the landing page of
-      </textarea>
-      <br />
-      <table>
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-points">Points</label>
-          </td>
-          <td>
-            <input id="wd-points" defaultValue={100} />
-          </td>
-        </tr>
-        
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-group">Assignment Group</label>
-          </td>
-          <td>
-            <select id="wd-group">
+      <Form>x
+        <Form.Group as={Row} className="mb-3" controlId="formAssignmentName">
+          <Form.Label column sm={2}>
+            Assignment Name
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control type="text" defaultValue="A1 - ENV + HTML" />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" controlId="formDescription">
+          <Col sm={12}>
+            <Form.Control
+              as="textarea"
+              rows={5}
+              defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Netlify"
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" controlId="formPoints">
+          <Form.Label column sm={2}>
+            Points
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control type="number" defaultValue={100} />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" controlId="formAssignmentGroup">
+          <Form.Label column sm={2}>
+            Assignment Group
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Select defaultValue="ASSIGNMENTS">
               <option value="ASSIGNMENTS">ASSIGNMENTS</option>
               <option value="QUIZZES">QUIZZES</option>
               <option value="EXAMS">EXAMS</option>
               <option value="PROJECT">PROJECT</option>
-              <option value="IDONTKNOWANYOTHERS">something</option>
-            </select>
-          </td>
-        </tr>
+            </Form.Select>
+          </Col>
+        </Form.Group>
 
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="Display-Grade">Display Grade as</label>
-          </td>
-          <td>
-            <select id="wd-grade">
+        <Form.Group as={Row} className="mb-3" controlId="formDisplayGrade">
+          <Form.Label column sm={2}>
+            Display Grade as
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Select defaultValue="Percentage">
               <option value="Percentage">Percentage</option>
               <option value="Decimal">Decimal</option>
-            </select>
-          </td>
-        </tr>
+            </Form.Select>
+          </Col>
+        </Form.Group>
 
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="Submission-Type">Submission Type</label>
-          </td>
-          <td>
-            <select id="wd-type">
+        <Form.Group as={Row} className="mb-3" controlId="formSubmissionType">
+          <Form.Label column sm={2}>
+            Submission Type
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Select defaultValue="Online">
               <option value="Online">Online</option>
               <option value="Offline">Offline</option>
-            </select>
-          </td>
-        </tr>
+            </Form.Select>
 
-        <tr>
-          <td></td>
-          <td>
-            <label>Online Entry Options</label><br />
-            
-            <input type="checkbox" id="wd-text-entry" />
-            <label htmlFor="wd-text-entry">Text Entry</label><br />
-            
-            <input type="checkbox" id="wd-website-url" defaultChecked />
-            <label htmlFor="wd-website-url">Website URL</label><br />
-            
-            <input type="checkbox" id="wd-media-recordings" />
-            <label htmlFor="wd-media-recordings">Media Recordings</label><br />
-            
-            <input type="checkbox" id="wd-student-annotation" />
-            <label htmlFor="wd-student-annotation">Student Annotation</label><br />
-            
-            <input type="checkbox" id="wd-file-upload" />
-            <label htmlFor="wd-file-upload">File Uploads</label>
-          </td>
-        </tr>
+            <div className="mt-3 p-3 border rounded">
+              <Form.Label className="fw-bold">Online Entry Options</Form.Label>
+              
+              <Form.Check
+                type="checkbox"
+                id="wd-text-entry"
+                label="Text Entry"
+                className="mb-2"
+              />
+              
+              <Form.Check
+                type="checkbox"
+                id="wd-website-url"
+                label="Website URL"
+                defaultChecked
+                className="mb-2"
+              />
+              
+              <Form.Check
+                type="checkbox"
+                id="wd-media-recordings"
+                label="Media Recordings"
+                className="mb-2"
+              />
+              
+              <Form.Check
+                type="checkbox"
+                id="wd-student-annotation"
+                label="Student Annotation"
+                className="mb-2"
+              />
+              
+              <Form.Check
+                type="checkbox"
+                id="wd-file-upload"
+                label="File Uploads"
+              />
+            </div>
+          </Col>
+        </Form.Group>
 
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-assign-to">Assign Assign to</label>
-          </td>
-          <td>
-            <input id="wd-assign-to" defaultValue="Everyone" />
-          </td>
-        </tr>
-        
-        <tr>
-          <td align="right" valign="top">
-            <label htmlFor="wd-due-date">Due</label>
-          </td>
-          <td>
-            <input type="date" id="wd-due-date" defaultValue="2024-05-13" />
-          </td>
-        </tr>
-        
-        <tr>
-          <td></td>
-          <td>
-            <label htmlFor="wd-available-from">Available from</label>
-            <label htmlFor="wd-available-until" style={{marginLeft: '20px'}}>  Until</label><br />
-            <input type="date" id="wd-available-from" defaultValue="2024-05-06" />
-            <input type="date" id="wd-available-until" defaultValue="2024-05-20" style={{marginLeft: '10px'}} />
-          </td>
-        </tr>
-        <button>Cancel</button>
-        <button>Save</button>
-      </table>
+        <Form.Group as={Row} className="mb-3" controlId="formAssignTo">
+          <Form.Label column sm={2}>
+            Assign to
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control type="text" defaultValue="Everyone" />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3" controlId="formDueDate">
+          <Form.Label column sm={2}>
+            Due
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control type="datetime-local" defaultValue="2024-05-13T23:59" />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>
+            Available from
+          </Form.Label>
+          <Col sm={5}>
+            <Form.Control
+              type="datetime-local"
+              id="wd-available-from"
+              defaultValue="2024-05-06T00:00"
+            />
+          </Col>
+          <Form.Label column sm={1} className="text-center">
+            Until
+          </Form.Label>
+          <Col sm={4}>
+            <Form.Control
+              type="datetime-local"
+              id="wd-available-until"
+              defaultValue="2024-05-20T23:59"
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3">
+          <Col sm={{ span: 10, offset: 2 }}>
+            <Button variant="secondary" className="me-2">
+              Cancel
+            </Button>
+            <Button variant="danger">
+              Save
+            </Button>
+          </Col>
+        </Form.Group>
+      </Form>
     </div>
 );}
 
