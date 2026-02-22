@@ -3,9 +3,15 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { Button, FormSelect } from "react-bootstrap";
+import { assignments } from "../../../../database";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+
 export default function AssignmentEditor() {
   /*https://react-bootstrap.netlify.app/docs/forms/checks-radios/ for checkboxes and Form.stuff
   */
+ const { cid, aid } = useParams();
+ const assignment = assignments.find((a) => a._id === aid);
   return (
     <div id="wd-assignments-editor">
       <Form>
@@ -14,7 +20,7 @@ export default function AssignmentEditor() {
             Assignment Name
           </Form.Label>
           <Col sm={10}>
-            <Form.Control type="text" defaultValue="A1 - ENV + HTML" />
+            <Form.Control type="text" defaultValue={assignment?.title} />
           </Col>
         </Form.Group>
 
@@ -33,7 +39,7 @@ export default function AssignmentEditor() {
             Points
           </Form.Label>
           <Col sm={10}>
-            <Form.Control type="number" defaultValue={100} />
+            <Form.Control type="number" defaultValue={assignment?.points} />
           </Col>
         </Form.Group>
 
@@ -134,7 +140,7 @@ export default function AssignmentEditor() {
             Due
           </Form.Label>
           <Col sm={10}>
-            <Form.Control type="datetime-local" defaultValue="2024-05-13T23:59" />
+            <Form.Control type="datetime-local" defaultValue={assignment?.due} />
           </Col>
         </Form.Group>
 
@@ -146,7 +152,7 @@ export default function AssignmentEditor() {
             <Form.Control
               type="datetime-local"
               id="wd-available-from"
-              defaultValue="2024-05-06T00:00"
+              defaultValue={assignment?.availableFrom}
             />
           </Col>
           <Form.Label column sm={1} className="text-center">
@@ -156,19 +162,21 @@ export default function AssignmentEditor() {
             <Form.Control
               type="datetime-local"
               id="wd-available-until"
-              defaultValue="2024-05-20T23:59"
+              defaultValue={assignment?.due}
             />
           </Col>
         </Form.Group>
 
         <Form.Group as={Row} className="mb-3">
           <Col sm={{ span: 10, offset: 2 }}>
-            <Button variant="secondary" className="me-2">
+            <Link href={`/courses/${cid}/assignments`}
+               className="btn btn-secondary me-2">
               Cancel
-            </Button>
-            <Button variant="danger">
+            </Link>
+            <Link href={`/courses/${cid}/assignments`}
+              className="btn btn-danger">
               Save
-            </Button>
+            </Link>
           </Col>
         </Form.Group>
       </Form>

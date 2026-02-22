@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { CiSearch } from "react-icons/ci";
@@ -10,8 +11,15 @@ import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { FormControl } from "react-bootstrap";
 import { LuNotebookPen } from "react-icons/lu";
+import { useParams } from "next/navigation";
+import { assignments } from "../../../database";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const courseAssignments = assignments.filter(
+  (a) => a.course === cid
+  );
+
   return (
     /*https://getbootstrap.com/docs/5.3/utilities/spacing/ 
     */
@@ -36,90 +44,50 @@ export default function Assignments() {
           </Button>
         </div>
       </div>
+      
       <div className="border-start border-success border-5">
         <div className="p-3 bg-secondary d-flex justify-content-between align-items-center" id="wd-assignments-title">
           <div>
             <BsGripVertical className="me-2 fs-5" />
             <strong>ASSIGNMENTS</strong>
           </div>
-            <div className="d-flex align-items-center">
-              <span className="me-3">40% of Total</span>
-              <FaPlus className="me-2" />
-              <IoEllipsisVertical className="fs-5" />
-            </div>
+          <div className="d-flex align-items-center">
+            <span className="me-3">40% of Total</span>
+            <FaPlus className="me-2" />
+            <IoEllipsisVertical className="fs-5" />
+          </div>
         </div>
+
         <ul id="wd-assignment-list" className="list-group list-group-flush">
-          <li className="wd-assignment-list-item list-group-item">
-            <div className="d-flex justify-content-between align-items-start">
-              <div className="d-flex flex-grow-1">
-                <BsGripVertical className="me-2 mt-4 fs-4" />
-                <LuNotebookPen className="me-4 mt-4 fs-4" />
-                <div>
-                  <Link href="/courses/1234/assignments/123" className="wd-assignment-link text-decoration-none text-dark fw-bold" >
-                    A1 - ENV + HTML
-                  </Link>
-                  <div className="text-muted small">
-                    <span className="text-danger"> Multiple Modules </span> | <strong>Not available until</strong> May 6 at 12:00am |
-                  </div>
-                  <div className="text-muted small">
-                    <strong>Due</strong> May 13 at 11:59pm | 100 pts
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex align-items-center">
-                <FaCheckCircle className="text-success me-2 mt-4 fs-5" />
-                <IoEllipsisVertical className="mt-4 fs-4" />
-              </div>
-            </div>
-          </li>
-
-          <li className="wd-assignment-list-item list-group-item">
-            <div className="d-flex justify-content-between align-items-start">
-              <div className="d-flex flex-grow-1">
-                <BsGripVertical className="me-2 mt-4 fs-4" />
-                <LuNotebookPen className="me-4 mt-4 fs-4" />
-                <div>
-                  <Link href="/courses/1234/assignments/123" className="wd-assignment-link text-decoration-none text-dark fw-bold">
-                    A2 - CSS + BOOTSTRAP
-                  </Link>
-                  <div className="text-muted small">
-                    <span className="text-danger"> Multiple Modules </span> | <strong>Not available until</strong> May 13 at 12:00am |
-                  </div>
-                  <div className="text-muted small">
-                    <strong>Due</strong> May 20 at 11:59pm | 100 pts
+          {courseAssignments.map((assignment) => (
+            <li key={assignment._id} className="wd-assignment-list-item list-group-item">
+              <div className="d-flex justify-content-between align-items-start">
+                <div className="d-flex flex-grow-1">
+                  <BsGripVertical className="me-2 mt-4 fs-4" />
+                  <LuNotebookPen className="me-4 mt-4 fs-4" />
+                  <div>
+                    <Link
+                      href={`/courses/${cid}/assignments/${assignment._id}`}
+                      className="wd-assignment-link text-decoration-none text-dark fw-bold"
+                    >
+                      {assignment.title}
+                    </Link>
+                    <div className="text-muted small">
+                      <span className="text-danger">{assignment.modules}</span> |{" "}
+                      <strong>Not available until</strong> {assignment.availableFrom} |
+                    </div>
+                    <div className="text-muted small">
+                      <strong>Due</strong> {assignment.due} | {assignment.points} pts
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="d-flex align-items-center">
-                <FaCheckCircle className="text-success me-2 mt-4 fs-5" />
-                <IoEllipsisVertical className="mt-4 fs-4" />
-              </div>
-            </div>
-          </li>
-
-          <li className="wd-assignment-list-item list-group-item">
-            <div className="d-flex justify-content-between align-items-start">
-              <div className="d-flex flex-grow-1">
-                <BsGripVertical className="me-2 mt-4 fs-4" />
-                <LuNotebookPen className="me-4 mt-4 fs-4" />
-                <div>
-                  <Link href="/courses/1234/assignments/123" className="wd-assignment-link text-decoration-none text-dark fw-bold" >
-                    A3 - JAVASCRIPT + REACT
-                  </Link>
-                  <div className="text-muted small ">
-                    <span className="text-danger"> Multiple Modules </span> | <strong>Not available until</strong> May 20 at 12:00am |
-                  </div>
-                  <div className="text-muted small">
-                    <strong>Due</strong> May 27 at 11:59pm | 100 pts
-                  </div>
+                <div className="d-flex align-items-center">
+                  <FaCheckCircle className="text-success me-2 mt-4 fs-5" />
+                  <IoEllipsisVertical className="mt-4 fs-4" />
                 </div>
               </div>
-              <div className="d-flex align-items-center">
-                <FaCheckCircle className="text-success me-2 mt-4 fs-5" />
-                <IoEllipsisVertical className="mt-4 fs-4" />
-              </div>
-            </div>
-          </li>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

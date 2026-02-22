@@ -1,11 +1,7 @@
 "use client";
-import React from "react";
 import { usePathname } from "next/navigation";
 
-export default function Breadcrumb({
-  course,
-}: {
-  course: { name: string } | undefined;
+export default function Breadcrumb({ course,}: {course: { name: string } | undefined;
 }) {
   const pathname = usePathname();
   const section = pathname.split("/").pop();
@@ -17,7 +13,7 @@ export default function Breadcrumb({
       <ol className="breadcrumb">
         <li className="breadcrumb-item">
           <span className="text-danger">
-            &#9776; {course?.name ?? "Course"}
+            &gt; {course?.name ?? "Course"}
           </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
