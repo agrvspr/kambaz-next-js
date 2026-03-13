@@ -1,28 +1,31 @@
-"use client"
+"use client";
 import Link from "next/link";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { BsGripVertical } from "react-icons/bs";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
-import { Button } from "react-bootstrap";
-import { Form } from "react-bootstrap";
-import { Row } from "react-bootstrap";
-import { Col } from "react-bootstrap";
-import { FormControl } from "react-bootstrap";
+import { Button, Form, Row, Col, FormControl } from "react-bootstrap";
 import { LuNotebookPen } from "react-icons/lu";
-import { useParams } from "next/navigation";
-import { assignments } from "../../../database";
+import { useParams, useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store";
+import { deleteAssignment } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const courseAssignments = assignments.filter(
-  (a) => a.course === cid
-  );
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
+  const courseAssignments = assignments.filter((a: any) => a.course === cid);
+
+  const handleDelete = (assignmentId: string, title: string) => {
+    if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
+      dispatch(deleteAssignment(assignmentId));
+    }
+  };
 
   return (
-    /*https://getbootstrap.com/docs/5.3/utilities/spacing/ 
-    */
     <div id="wd-assignments">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div className="input-group" style={{ width: "300px" }}>
@@ -30,8 +33,10 @@ export default function Assignments() {
             <CiSearch />
           </span>
           <Form>
-            <Row className="search" controlId="search-bar">
-              <Col sm={10}> <FormControl type="Search" placeholder="Search..." /> </Col>
+            <Row className="search">
+              <Col sm={10}>
+                <FormControl type="Search" placeholder="Search..." />
+              </Col>
             </Row>
           </Form>
         </div>
@@ -39,14 +44,21 @@ export default function Assignments() {
           <Button variant="secondary" className="me-2" id="wd-add-assignment-group">
             <FaPlus className="me-1" /> Group
           </Button>
-          <Button variant="danger" id="wd-add-assignment">
+          <Button
+            variant="danger"
+            id="wd-add-assignment"
+            onClick={() => router.push(`/courses/${cid}/assignments/new`)}
+          >
             <FaPlus className="me-1" /> Assignment
           </Button>
         </div>
       </div>
-      
+
       <div className="border-start border-success border-5">
-        <div className="p-3 bg-secondary d-flex justify-content-between align-items-center" id="wd-assignments-title">
+        <div
+          className="p-3 bg-secondary d-flex justify-content-between align-items-center"
+          id="wd-assignments-title"
+        >
           <div>
             <BsGripVertical className="me-2 fs-5" />
             <strong>ASSIGNMENTS</strong>
@@ -59,8 +71,11 @@ export default function Assignments() {
         </div>
 
         <ul id="wd-assignment-list" className="list-group list-group-flush">
-          {courseAssignments.map((assignment) => (
-            <li key={assignment._id} className="wd-assignment-list-item list-group-item">
+          {courseAssignments.map((assignment: any) => (
+            <li
+              key={assignment._id}
+              className="wd-assignment-list-item list-group-item"
+            >
               <div className="d-flex justify-content-between align-items-start">
                 <div className="d-flex flex-grow-1">
                   <BsGripVertical className="me-2 mt-4 fs-4" />
@@ -82,6 +97,12 @@ export default function Assignments() {
                   </div>
                 </div>
                 <div className="d-flex align-items-center">
+                  <FaTrash
+                    className="text-danger me-3 mt-4 fs-5"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleDelete(assignment._id, assignment.title)}
+                    id="wd-delete-assignment-click"
+                  />
                   <FaCheckCircle className="text-success me-2 mt-4 fs-5" />
                   <IoEllipsisVertical className="mt-4 fs-4" />
                 </div>
@@ -91,4 +112,5 @@ export default function Assignments() {
         </ul>
       </div>
     </div>
-);}
+  );
+}

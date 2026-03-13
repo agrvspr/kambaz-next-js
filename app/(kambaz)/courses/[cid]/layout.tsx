@@ -6,13 +6,23 @@ import { useParams } from "next/navigation";
 import { RootState } from "../../store";
 import { FaAlignJustify } from "react-icons/fa";
 import Breadcrumb from "./Breadcrumb";
+import { enrollments } from "../../database";
 
 export default function CoursesLayout({ children }: { children: ReactNode }) {
   const { cid } = useParams();
   const [showNav, setShowNav] = useState(true);
   const { courses } = useSelector((state: RootState) => state.coursesReducer);
   const course = courses.find((course: any) => course._id === cid);
+  const currentUser = useSelector((state: RootState) => state.accountReducer.currentUser);
 
+  const enrolled = enrollments.some(
+    (e: any) => e.user === currentUser?._id && e.course === cid
+  );
+
+  if (!enrolled) {
+    return null;
+  }
+  
   return (
     <div id="wd-courses">
       <Breadcrumb course={course} />

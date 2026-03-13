@@ -1,52 +1,89 @@
-"use client"
+"use client";
+import { useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { Button, FormSelect } from "react-bootstrap";
-import { assignments } from "../../../../database";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../../store";
+import { addAssignment, updateAssignment } from "../reducer";
 
 export default function AssignmentEditor() {
-  /*https://react-bootstrap.netlify.app/docs/forms/checks-radios/ for checkboxes and Form.stuff
-  */
- const { cid, aid } = useParams();
- const assignment = assignments.find((a) => a._id === aid);
+  const { cid, aid } = useParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
+
+  const existing = assignments.find((a: any) => a._id === aid);
+  const isNew = aid === "new";
+
+  const [assignment, setAssignment] = useState<any>(
+    isNew
+      ? {
+          title: "New Assignment",
+          description: "",
+          points: 100,
+          due: "",
+          availableFrom: "",
+          availableUntil: "",
+          course: cid,
+          modules: "Multiple Modules",
+        }
+      : { ...existing }
+  );
+
+  const handleSave = () => {
+    if (isNew) {
+      dispatch(addAssignment(assignment));
+    } else {
+      dispatch(updateAssignment(assignment));
+    }
+    router.push(`/courses/${cid}/assignments`);
+  };
+
+  const handleCancel = () => {
+    router.push(`/courses/${cid}/assignments`);
+  };
+
   return (
     <div id="wd-assignments-editor">
       <Form>
-        <Form.Group as={Row} className="mb-3" controlId="formAssignmentName">
-          <Form.Label column sm={4}>
-            Assignment Name
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>Assignment Name</Form.Label>
           <Col sm={10}>
-            <Form.Control type="text" defaultValue={assignment?.title} />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="formDescription">
-          <Col sm={12}>
             <Form.Control
-              as="textarea"
-              rows={6}
-              defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Netlify"
+              type="text"
+              value={assignment.title}
+              onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
             />
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3" controlId="formPoints">
-          <Form.Label column sm={2}>
-            Points
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control type="number" defaultValue={assignment?.points} />
+        <Form.Group as={Row} className="mb-3">
+          <Col sm={12}>
+            <Form.Control
+              as="textarea"
+              rows={6}
+              value={assignment.description}
+              placeholder="Assignment description..."
+              onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
+            />
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3" controlId="formAssignmentGroup">
-          <Form.Label column sm={2}>
-            Assignment Group
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>Points</Form.Label>
+          <Col sm={10}>
+            <Form.Control
+              type="number"
+              value={assignment.points}
+              onChange={(e) => setAssignment({ ...assignment, points: e.target.value })}
+            />
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>Assignment Group</Form.Label>
           <Col sm={10}>
             <Form.Select defaultValue="ASSIGNMENTS">
               <option value="ASSIGNMENTS">ASSIGNMENTS</option>
@@ -57,10 +94,8 @@ export default function AssignmentEditor() {
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3" controlId="formDisplayGrade">
-          <Form.Label column sm={2}>
-            Display Grade as
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>Display Grade as</Form.Label>
           <Col sm={10}>
             <Form.Select defaultValue="Percentage">
               <option value="Percentage">Percentage</option>
@@ -69,117 +104,67 @@ export default function AssignmentEditor() {
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3" controlId="formSubmissionType">
-          <Form.Label column sm={2}>
-            Submission Type
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>Submission Type</Form.Label>
           <Col sm={10}>
-          <div className="border rounded p-3 bg-light">
-            <Form.Select defaultValue="Online">
-              <option value="Online">Online</option>
-              <option value="Offline">Offline</option>
-            </Form.Select>
-            
-            <div className="mt-3 p-3 rounded">
-              <Form.Label className="fw-bold">Online Entry Options</Form.Label>
-              
-              <Form.Check
-                type="checkbox"
-                id="wd-text-entry"
-                label="Text Entry"
-                className="mb-2"
-              />
-              
-              <Form.Check
-                type="checkbox"
-                id="wd-website-url"
-                label="Website URL"
-                defaultChecked
-                className="mb-2"
-              />
-              
-              <Form.Check
-                type="checkbox"
-                id="wd-media-recordings"
-                label="Media Recordings"
-                className="mb-2"
-              />
-              
-              <Form.Check
-                type="checkbox"
-                id="wd-student-annotation"
-                label="Student Annotation"
-                className="mb-2"
-              />
-              
-              <Form.Check
-                type="checkbox"
-                id="wd-file-upload"
-                label="File Uploads"
-              />
+            <div className="border rounded p-3 bg-light">
+              <Form.Select defaultValue="Online">
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+              </Form.Select>
+              <div className="mt-3 p-3 rounded">
+                <Form.Label className="fw-bold">Online Entry Options</Form.Label>
+                <Form.Check type="checkbox" id="wd-text-entry" label="Text Entry" className="mb-2" />
+                <Form.Check type="checkbox" id="wd-website-url" label="Website URL" defaultChecked className="mb-2" />
+                <Form.Check type="checkbox" id="wd-media-recordings" label="Media Recordings" className="mb-2" />
+                <Form.Check type="checkbox" id="wd-student-annotation" label="Student Annotation" className="mb-2" />
+                <Form.Check type="checkbox" id="wd-file-upload" label="File Uploads" />
               </div>
             </div>
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3" controlId="formAssignTo">
-          <Form.Label column sm={2}>
-            Assign to
-          </Form.Label>
+        <Form.Group as={Row} className="mb-3">
+          <Form.Label column sm={2}>Due</Form.Label>
           <Col sm={10}>
-            <Form.Select defaultValue="Everyone" className="mb-3">
-              <option value="Everyone">Everyone</option>
-              <option value="Student">Student</option>
-              <option value="Group">Group</option>
-            </Form.Select>            
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} className="mb-3" controlId="formDueDate">
-          <Form.Label column sm={2}>
-            Due
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control type="datetime-local" defaultValue={assignment?.due} />
+            <Form.Control
+              type="datetime-local"
+              value={assignment.due}
+              onChange={(e) => setAssignment({ ...assignment, due: e.target.value })}
+            />
           </Col>
         </Form.Group>
 
         <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm={2}>
-            Available from
-          </Form.Label>
+          <Form.Label column sm={2}>Available from</Form.Label>
           <Col sm={5}>
             <Form.Control
               type="datetime-local"
-              id="wd-available-from"
-              defaultValue={assignment?.availableFrom}
+              value={assignment.availableFrom}
+              onChange={(e) => setAssignment({ ...assignment, availableFrom: e.target.value })}
             />
           </Col>
-          <Form.Label column sm={1} className="text-center">
-            Until
-          </Form.Label>
+          <Form.Label column sm={1} className="text-center">Until</Form.Label>
           <Col sm={4}>
             <Form.Control
               type="datetime-local"
-              id="wd-available-until"
-              defaultValue={assignment?.due}
+              value={assignment.availableUntil}
+              onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}
             />
           </Col>
         </Form.Group>
 
         <Form.Group as={Row} className="mb-3">
           <Col sm={{ span: 10, offset: 2 }}>
-            <Link href={`/courses/${cid}/assignments`}
-               className="btn btn-secondary me-2">
+            <button className="btn btn-secondary me-2" onClick={handleCancel} type="button">
               Cancel
-            </Link>
-            <Link href={`/courses/${cid}/assignments`}
-              className="btn btn-danger">
+            </button>
+            <button className="btn btn-danger" onClick={handleSave} type="button">
               Save
-            </Link>
+            </button>
           </Col>
         </Form.Group>
       </Form>
     </div>
-);}
-
+  );
+}
