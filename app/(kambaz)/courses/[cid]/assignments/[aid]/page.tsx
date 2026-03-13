@@ -54,8 +54,7 @@ export default function AssignmentEditor() {
             <Form.Control
               type="text"
               value={assignment.title}
-              onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}
-            />
+              onChange={(e) => setAssignment({ ...assignment, title: e.target.value })}/>
           </Col>
         </Form.Group>
 
@@ -66,8 +65,7 @@ export default function AssignmentEditor() {
               rows={6}
               value={assignment.description}
               placeholder="Assignment description..."
-              onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}
-            />
+              onChange={(e) => setAssignment({ ...assignment, description: e.target.value })}/>
           </Col>
         </Form.Group>
 
@@ -77,8 +75,7 @@ export default function AssignmentEditor() {
             <Form.Control
               type="number"
               value={assignment.points}
-              onChange={(e) => setAssignment({ ...assignment, points: e.target.value })}
-            />
+              onChange={(e) => setAssignment({ ...assignment, points: e.target.value })}/>
           </Col>
         </Form.Group>
 
@@ -130,8 +127,7 @@ export default function AssignmentEditor() {
             <Form.Control
               type="datetime-local"
               value={assignment.due}
-              onChange={(e) => setAssignment({ ...assignment, due: e.target.value })}
-            />
+              onChange={(e) => setAssignment({ ...assignment, due: e.target.value })}/>
           </Col>
         </Form.Group>
 
@@ -141,16 +137,14 @@ export default function AssignmentEditor() {
             <Form.Control
               type="datetime-local"
               value={assignment.availableFrom}
-              onChange={(e) => setAssignment({ ...assignment, availableFrom: e.target.value })}
-            />
+              onChange={(e) => setAssignment({ ...assignment, availableFrom: e.target.value })}/>
           </Col>
           <Form.Label column sm={1} className="text-center">Until</Form.Label>
           <Col sm={4}>
             <Form.Control
               type="datetime-local"
               value={assignment.availableUntil}
-              onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}
-            />
+              onChange={(e) => setAssignment({ ...assignment, availableUntil: e.target.value })}/>
           </Col>
         </Form.Group>
 

@@ -52,8 +52,7 @@ export default function Dashboard() {
         {showAllCourses ? "My Enrollments" : "All Courses"}
       </Button>
 
-      {isFaculty && 
-      (<>
+      {isFaculty && (<>
           <h5>
             New Course
             <button className="btn btn-primary float-end" id="wd-add-new-course-click"
