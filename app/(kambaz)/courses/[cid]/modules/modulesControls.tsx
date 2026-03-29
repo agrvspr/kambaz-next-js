@@ -9,6 +9,7 @@ export default function ModulesControls(
  const [show, setShow] = useState(false);
  const handleClose = () => setShow(false);
  const handleShow = () => setShow(true);
+ 
  return (
    <div id="wd-modules-controls" className="text-nowrap">
      <Button variant="danger" size="lg" className="float-end" onClick={handleShow} >

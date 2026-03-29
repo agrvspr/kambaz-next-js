@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { BsGripVertical } from "react-icons/bs";
@@ -10,19 +11,31 @@ import { LuNotebookPen } from "react-icons/lu";
 import { useParams, useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store";
-import { deleteAssignment } from "./reducer";
+import * as client from "./client";
+import { setAssignments } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
-  const courseAssignments = assignments.filter((a: any) => a.course === cid);
-
   const handleDelete = (assignmentId: string, title: string) => {
     if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
-      dispatch(deleteAssignment(assignmentId));
+      onDeleteAssignment(assignmentId);
     }
+  };
+  const fetchAssignments = async () => {
+    const assignments = await client.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [cid]);
+
+  const onDeleteAssignment = async (assignmentId: string) => {
+    await client.deleteAssignment(assignmentId);
+    dispatch(setAssignments(assignments.filter((a: any) => a._id !== assignmentId)));
   };
 
   return (
@@ -71,7 +84,7 @@ export default function Assignments() {
         </div>
 
         <ul id="wd-assignment-list" className="list-group list-group-flush">
-          {courseAssignments.map((assignment: any) => (
+          {assignments.map((assignment: any) => (
             <li
               key={assignment._id}
               className="wd-assignment-list-item list-group-item"

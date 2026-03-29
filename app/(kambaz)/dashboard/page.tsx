@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { setCourses } from "../courses/reducer";
 import * as client from "../courses/client";
+import * as enrollmentsClient from "../enrollments/client";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -55,6 +56,31 @@ export default function Dashboard() {
     await client.updateCourse(course);
     dispatch(setCourses(courses.map((c) => c._id === course._id ? course : c)));
   };
+
+  const onEnroll = async (courseId: string) => {
+    await enrollmentsClient.enrollUserInCourse(currentUser._id, courseId);
+    fetchEnrollments();
+  };
+
+  const onUnenroll = async (courseId: string) => {
+    await enrollmentsClient.unenrollUserFromCourse(currentUser._id, courseId);
+    fetchEnrollments();
+    if (!showAllCourses) {
+      dispatch(setCourses(courses.filter((c) => c._id !== courseId)));
+    }
+  };
+
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+
+  const fetchEnrollments = async () => {
+    const data = await enrollmentsClient.fetchEnrollments(currentUser._id);
+    setEnrollments(data);
+  };
+
+  useEffect(() => {
+    fetchCourses();
+    fetchEnrollments();
+  }, [currentUser, showAllCourses]);
 
   const isFaculty = ["FACULTY", "ADMIN"].includes(currentUser?.role);
 
@@ -103,21 +129,38 @@ export default function Dashboard() {
                       style={{ height: "100px" }}>
                       {c.description}
                     </CardText>
-                    <Button variant="primary" as={Link as any} href={`/courses/${c._id}/home`}>
-                      Go
-                    </Button>
-                    {isFaculty && (<>
-                      <button className="btn btn-danger float-end me-2"
-                        id="wd-delete-course-click"
-                        onClick={(e) => { e.preventDefault(); onDeleteCourse(c._id); }}>
-                        Delete
-                      </button>
-                      <button className="btn btn-warning me-2 float-end"
-                        id="wd-edit-course-click"
-                        onClick={(e) => { e.preventDefault(); setCourse(c); }}>
-                        Edit
-                      </button>
-                    </>)}
+
+                    <div className="d-flex justify-content-between mt-2">
+                      <div>
+                        <button className="btn btn-primary"
+                          onClick={(e) => { e.preventDefault(); window.location.href = `/courses/${c._id}/home`; }}>
+                          Go
+                        </button>
+                        {showAllCourses && (
+                          enrollments.some((e) => e.course === c._id) ? (
+                            <button className="btn btn-danger"
+                              onClick={(e) => { e.preventDefault(); onUnenroll(c._id); }}>
+                              Unenroll
+                            </button>
+                          ) : (
+                            <button className="btn btn-success"
+                              onClick={(e) => { e.preventDefault(); onEnroll(c._id); }}>
+                              Enroll
+                            </button>
+                          )
+                        )}
+                        {isFaculty && (<>
+                          <button className="btn btn-danger ms-2"
+                            onClick={(e) => { e.preventDefault(); onDeleteCourse(c._id); }}>
+                            Delete
+                          </button>
+                          <button className="btn btn-warning ms-2"
+                            onClick={(e) => { e.preventDefault(); setCourse(c); }}>
+                            Edit
+                          </button>
+                        </>)}
+                      </div>
+                    </div>
                   </CardBody>
                 </Link>
               </Card>
