@@ -57,7 +57,7 @@ export default function WorkingWithObjects() {
       </a>
       <FormControl className="w-75" id="wd-assignment-completed" type="checkbox"
         defaultChecked={assignment.completed}
-        onChange={(e) => setAssignment({ ...assignment, completed: e.target.checked })}/>
+        onChange={(e) => setAssignment({ ...assignment, completed: (e.target as any).checked })}/>
       <hr/>
 
       <h4>Retrieving Module</h4>
