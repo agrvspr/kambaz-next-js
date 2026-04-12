@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { BsGripVertical } from "react-icons/bs";
