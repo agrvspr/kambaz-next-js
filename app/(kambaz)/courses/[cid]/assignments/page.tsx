@@ -15,6 +15,8 @@ import * as client from "./client";
 import { setAssignments } from "./reducer";
 
 export default function Assignments() {
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
   const { cid } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -57,13 +59,12 @@ export default function Assignments() {
           <Button variant="secondary" className="me-2" id="wd-add-assignment-group">
             <FaPlus className="me-1" /> Group
           </Button>
-          <Button
-            variant="danger"
-            id="wd-add-assignment"
-            onClick={() => router.push(`/courses/${cid}/assignments/new`)}
-          >
-            <FaPlus className="me-1" /> Assignment
-          </Button>
+          {isFaculty && (
+            <Button variant="danger" id="wd-add-assignment"
+              onClick={() => router.push(`/courses/${cid}/assignments/new`)}>
+              <FaPlus className="me-1" /> Assignment
+            </Button>
+          )}
         </div>
       </div>
 
@@ -110,12 +111,13 @@ export default function Assignments() {
                   </div>
                 </div>
                 <div className="d-flex align-items-center">
-                  <FaTrash
-                    className="text-danger me-3 mt-4 fs-5"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleDelete(assignment._id, assignment.title)}
-                    id="wd-delete-assignment-click"
-                  />
+                  {isFaculty && (
+                    <FaTrash
+                      className="text-danger me-3 mt-4 fs-5"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleDelete(assignment._id, assignment.title)}
+                    />
+                  )}
                   <FaCheckCircle className="text-success me-2 mt-4 fs-5" />
                   <IoEllipsisVertical className="mt-4 fs-4" />
                 </div>

@@ -13,6 +13,8 @@ import { BsGripVertical } from "react-icons/bs";
 import * as client from "../../client";
 
 export default function Modules() {
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
   const { cid } = useParams();
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: RootState) => state.modulesReducer);
@@ -34,19 +36,21 @@ export default function Modules() {
     dispatch(setModules(newModules));
   };
   const onCreateModuleForCourse = async () => {
-  if (!cid) return;
-  const newModule = { name: moduleName, course: cid };
-  const module = await client.createModuleForCourse(cid as string, newModule);
-  dispatch(setModules([...modules, module]));
-};
+    if (!cid) return;
+    const newModule = { name: moduleName, course: cid };
+    const module = await client.createModuleForCourse(cid as string, newModule);
+    dispatch(setModules([...modules, module]));
+  };
 
   return (
     <div>
-      <ModulesControls
-        setModuleName={setModuleName}
-        moduleName={moduleName}
-        addModule={onCreateModuleForCourse}
-      />
+      {isFaculty && (
+        <ModulesControls
+          setModuleName={setModuleName}
+          moduleName={moduleName}
+          addModule={onCreateModuleForCourse}
+        />
+      )}
       <br /><br /><br /><br />
       <ListGroup id="wd-modules" className="rounded-0">
         {modules
@@ -55,7 +59,7 @@ export default function Modules() {
               <div className="wd-title p-3 ps-2 bg-secondary">
                 <BsGripVertical className="me-2 fs-3" />
                 {!module.editing && module.name}
-                {module.editing && (
+                {module.editing && isFaculty && (
                   <FormControl
                     className="w-50 d-inline-block"
                     defaultValue={module.name}
@@ -67,17 +71,19 @@ export default function Modules() {
                     }}
                   />
                 )}
-                <ModuleControlButtons
-                  moduleId={module._id}
-                  deleteModule={(moduleId) => onRemoveModule(moduleId)}
-                  editModule={(moduleId) => dispatch(editModule(moduleId))}
-                />
+                {isFaculty && (
+                  <ModuleControlButtons
+                    moduleId={module._id}
+                    deleteModule={(moduleId) => onRemoveModule(moduleId)}
+                    editModule={(moduleId) => dispatch(editModule(moduleId))}
+                  />
+                )}
               </div>
               {module.lessons && (
                 <ListGroup className="wd-lessons rounded-0">
                   {module.lessons.map((lesson: any) => (
                     <ListGroupItem key={lesson._id} className="wd-lesson p-3 ps-1">
-                      <BsGripVertical className="me-2 fs-3" /> {lesson.name} <LessonControlButtons />
+                      <BsGripVertical className="me-2 fs-3" /> {lesson.name} {isFaculty && <LessonControlButtons />}
                     </ListGroupItem>
                   ))}
                 </ListGroup>
