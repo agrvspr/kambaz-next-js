@@ -11,11 +11,17 @@ import * as client from "../client";
 import { setAssignments } from "../reducer";
 
 export default function AssignmentEditor() {
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
+
   const { cid, aid } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
-
+  if (!isFaculty) {
+    router.push(`/courses/${cid}/assignments`);
+    return null;
+  }
   const existing = assignments.find((a: any) => a._id === aid);
   const isNew = aid === "new";
 
