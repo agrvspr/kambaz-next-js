@@ -78,7 +78,7 @@ export default function Quizzes({ params }: { params: { cid: string } }) {
       {/* Assignment group header */}
       <div className="border-start border-success border-5 mb-3">
         <div
-          className="p-3 bg-secondary d-flex justify-content-between align-items-center text-white"
+          className="p-3 bg-secondary d-flex justify-content-between align-items-center text-Black"
           id="wd-quizzes-title"
         >
           <div className="d-flex align-items-center">
