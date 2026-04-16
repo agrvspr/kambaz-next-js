@@ -21,10 +21,10 @@ const quizzesSlice = createSlice({
     },
 
     updateQuiz: (state, { payload: quiz }) => {
-      state.quizzes = state.quizzes.map((q: any) =>
-        q._id === quiz._id ? quiz : q
-      );
-    },
+  state.quizzes = state.quizzes.map((q: any) =>
+    String(q._id) === String(quiz._id) ? quiz : q
+  );
+},
   },
 });
 
