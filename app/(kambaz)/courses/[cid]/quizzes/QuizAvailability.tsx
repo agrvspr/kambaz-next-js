@@ -18,15 +18,15 @@ function formatDate(dateStr?: string): string {
 
 export default function QuizAvailability({ quiz }: QuizAvailabilityProps) {
   const now = new Date();
-  const available = quiz.availableDate ? new Date(quiz.availableDate) : null;
-  const until = quiz.availableUntilDate ? new Date(quiz.availableUntilDate) : null;
+  const available = quiz.availableFrom ? new Date(quiz.availableFrom) : null;
+  const until = quiz.availableUntil ? new Date(quiz.availableUntil) : null;
 
   let availabilityLabel: string;
 
   if (until && now > until) {
     availabilityLabel = "Closed";
   } else if (available && now < available) {
-    availabilityLabel = `Not available until ${formatDate(quiz.availableDate)}`;
+    availabilityLabel = `Not available until ${formatDate(quiz.availableFrom)}`;
   } else {
     availabilityLabel = "Available";
   }

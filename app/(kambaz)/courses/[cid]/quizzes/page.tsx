@@ -1,5 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { FaPlus, FaBan, FaCheckCircle } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
@@ -8,19 +9,25 @@ import QuizContextMenu from "./QuizContextMenu";
 import QuizAvailability from "./QuizAvailability";
 import { BsGripVertical } from "react-icons/bs";
 
-export default function Quizzes({ params }: { params: { cid: string } }) {
-  const { cid } = params;
+export default function Quizzes() {
+  const params = useParams();
+
+  const cid =
+    typeof params.cid === "string"
+      ? params.cid
+      : params.cid?.[0];
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // Select quizzes for this course from the Redux store
-  const quizzes: Quiz[] = useSelector((state: any) =>
+  const quizzes = useSelector((state: any) =>
     (state.quizzesReducer?.quizzes ?? []).filter(
       (q: Quiz) => q.courseId === cid
     )
   );
 
   const handleAddQuiz = () => {
+    if (!cid) return;
+
     const newQuiz: Quiz = {
       _id: uuidv4(),
       courseId: cid,
@@ -31,16 +38,20 @@ export default function Quizzes({ params }: { params: { cid: string } }) {
       questions: [],
       quizType: "Graded Quiz",
       assignmentGroup: "Quizzes",
-      shuffleAnswers: true,
-      timeLimit: 20,
+      shuffle: true,
+      time: 20,
       multipleAttempts: false,
-      showCorrectAnswers: false,
-      oneQuestionAtATime: true,
-      webcamRequired: false,
-      lockQuestionsAfterAnswering: false,
+      showCorrect: "Never",
+      oneByOne: true,
+      webcam: false,
+      lockQuestions: false,
+      howManyAttempts: 0,
+      password: ""
     };
+
     dispatch(addQuiz(newQuiz));
-    router.push(`/Kambaz/Courses/${cid}/Quizzes/${newQuiz._id}`);
+
+    router.push(`/courses/${cid}/quizzes/${newQuiz._id}`);
   };
 
   const handleDelete = (quizId: string) => {
@@ -122,12 +133,12 @@ export default function Quizzes({ params }: { params: { cid: string } }) {
               {/* Center: quiz info */}
               <div className="flex-grow-1">
                 <a
-                  href={`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}`}
+                  href={`/courses/${cid}/quizzes/${quiz._id}`}
                   className="fw-bold text-dark text-decoration-none"
                   style={{ cursor: "pointer" }}
                   onClick={(e) => {
                     e.preventDefault();
-                    router.push(`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}`);
+                    router.push(`/courses/${cid}/quizzes/${quiz._id}`);
                   }}
                 >
                   {quiz.title}
@@ -145,7 +156,7 @@ export default function Quizzes({ params }: { params: { cid: string } }) {
                 <QuizContextMenu
                   quiz={quiz}
                   onEdit={() =>
-                    router.push(`/Kambaz/Courses/${cid}/Quizzes/${quiz._id}`)
+                    router.push(`/courses/${cid}/quizzes/${quiz._id}`)
                   }
                   onDelete={() => handleDelete(quiz._id)}
                   onPublishToggle={() => handlePublishToggle(quiz)}

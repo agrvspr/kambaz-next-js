@@ -1,81 +1,69 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = { quizzes: [] };
+
+const quizzesSlice = createSlice({
+  name: "quizzes",
+  initialState,
+  reducers: {
+    addQuiz: (state, { payload: quiz }) => {
+      state.quizzes.push(quiz);
+    },
+
+    deleteQuiz: (state, { payload: quizId }) => {
+      state.quizzes = state.quizzes.filter(
+        (q: any) => q._id !== quizId
+      );
+    },
+
+    setQuizzes: (state, action) => {
+      state.quizzes = action.payload;
+    },
+
+    updateQuiz: (state, { payload: quiz }) => {
+      state.quizzes = state.quizzes.map((q: any) =>
+        q._id === quiz._id ? quiz : q
+      );
+    },
+  },
+});
+
 export interface Quiz {
   _id: string;
   courseId: string;
   title: string;
-  description?: string;
+  description: string;
+
+  assignmentGroup: "Quizzes" | "Exams" | "Assignments" | "Projects";
+
   points: number;
-  dueDate?: string;
-  availableDate?: string;
-  availableUntilDate?: string;
+
+  shuffle: boolean;
+  time: number;
+  multipleAttempts: boolean;
+
+  howManyAttempts: number;
+
+  showCorrect: "Immediately" | "After Quiz" | "After Due Date" | "Never";
+  quizType: "Graded Quiz" | "Practice Quiz" | "Graded Survey" | "Ungraded Survey";
+  password: string;
+
+  oneByOne: boolean;
+  webcam: boolean;
+  lockQuestions: boolean;
   published: boolean;
-  questions: Question[];
-  timeLimit?: number;
-  multipleAttempts?: boolean;
-  showCorrectAnswers?: boolean;
-  accessCode?: string;
-  oneQuestionAtATime?: boolean;
-  webcamRequired?: boolean;
-  lockQuestionsAfterAnswering?: boolean;
-  shuffleAnswers?: boolean;
-  quizType?: "Graded Quiz" | "Practice Quiz" | "Graded Survey" | "Ungraded Survey";
-  assignmentGroup?: "Quizzes" | "Exams" | "Assignments" | "Project";
+  dueDate?: string;
+  availableFrom?: string;
+  availableUntil?: string;
+
+  questions: any[];
 }
- 
-export interface Question {
-  _id: string;
-  title: string;
-  type: "Multiple Choice" | "True/False" | "Fill in the Blank";
-  points: number;
-  question: string;
-  choices?: Choice[];
-  correctAnswer?: string;
-}
- 
-export interface Choice {
-  _id: string;
-  text: string;
-  isCorrect: boolean;
-}
- 
-export interface QuizzesState {
-  quizzes: Quiz[];
-}
- 
-const initialState: QuizzesState = {
-  quizzes: [],
-};
- 
-const ADD_QUIZ = "ADD_QUIZ";
-const DELETE_QUIZ = "DELETE_QUIZ";
-const UPDATE_QUIZ = "UPDATE_QUIZ";
-const SET_QUIZZES = "SET_QUIZZES";
- 
-export const addQuiz = (quiz: Quiz) => ({ type: ADD_QUIZ, payload: quiz });
-export const deleteQuiz = (quizId: string) => ({ type: DELETE_QUIZ, payload: quizId });
-export const updateQuiz = (quiz: Quiz) => ({ type: UPDATE_QUIZ, payload: quiz });
-export const setQuizzes = (quizzes: Quiz[]) => ({ type: SET_QUIZZES, payload: quizzes });
- 
-const quizzesReducer = (state = initialState, action: any): QuizzesState => {
-  switch (action.type) {
-    case ADD_QUIZ:
-      return { ...state, quizzes: [...state.quizzes, action.payload] };
-    case DELETE_QUIZ:
-      return {
-        ...state,
-        quizzes: state.quizzes.filter((q) => q._id !== action.payload),
-      };
-    case UPDATE_QUIZ:
-      return {
-        ...state,
-        quizzes: state.quizzes.map((q) =>
-          q._id === action.payload._id ? action.payload : q
-        ),
-      };
-    case SET_QUIZZES:
-      return { ...state, quizzes: action.payload };
-    default:
-      return state;
-  }
-};
- 
-export default quizzesReducer;
+
+export const {
+  addQuiz,
+  deleteQuiz,
+  setQuizzes,
+  updateQuiz,
+} = quizzesSlice.actions;
+
+export default quizzesSlice.reducer;
