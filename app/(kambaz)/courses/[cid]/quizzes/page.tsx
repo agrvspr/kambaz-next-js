@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Quiz, addQuiz, deleteQuiz, updateQuiz } from "./reducer";
 import QuizContextMenu from "./QuizContextMenu";
 import QuizAvailability from "./QuizAvailability";
+import { BsGripVertical } from "react-icons/bs";
 
 export default function Quizzes({ params }: { params: { cid: string } }) {
   const { cid } = params;
@@ -75,11 +76,16 @@ export default function Quizzes({ params }: { params: { cid: string } }) {
       </div>
 
       {/* Assignment group header */}
-      <div
-        className="d-flex justify-content-between align-items-center border-bottom border-2 border-dark pb-2 mb-0"
-        style={{ borderLeft: "3px solid green", paddingLeft: "8px" }}
-      >
-        <h5 className="mb-0 fw-bold">Assignment Quizzes</h5>
+      <div className="border-start border-success border-5 mb-3">
+        <div
+          className="p-3 bg-secondary d-flex justify-content-between align-items-center text-white"
+          id="wd-quizzes-title"
+        >
+          <div className="d-flex align-items-center">
+            <BsGripVertical className="me-2 fs-5" />
+            <strong>ASSIGNMENT QUIZZES</strong>
+          </div>
+        </div>
       </div>
 
       {/* Quiz list */}
