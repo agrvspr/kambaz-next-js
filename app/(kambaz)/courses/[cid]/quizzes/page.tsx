@@ -29,7 +29,7 @@ export default function Quizzes() {
   );
 
   const handleAddQuiz = () => {
-    if (!cid || isFaculty) return;
+    if (!cid || !isFaculty) return;
 
     const newQuiz: Quiz = {
       _id: uuidv4(),
