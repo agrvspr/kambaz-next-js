@@ -8,10 +8,13 @@ import { Quiz, addQuiz, deleteQuiz, updateQuiz } from "./reducer";
 import QuizContextMenu from "./QuizContextMenu";
 import QuizAvailability from "./QuizAvailability";
 import { BsGripVertical } from "react-icons/bs";
+import { RootState } from "../../../store";
 
 export default function Quizzes() {
   const params = useParams();
-
+  
+    const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+    const isFaculty = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
   const cid =
     typeof params.cid === "string"
       ? params.cid
@@ -26,7 +29,7 @@ export default function Quizzes() {
   );
 
   const handleAddQuiz = () => {
-    if (!cid) return;
+    if (!cid || isFaculty) return;
 
     const newQuiz: Quiz = {
       _id: uuidv4(),
