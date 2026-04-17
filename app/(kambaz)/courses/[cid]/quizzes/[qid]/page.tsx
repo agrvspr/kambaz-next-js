@@ -120,7 +120,7 @@ export default function QuizEditor() {
             ...quiz,
             _id: qid,
             courseId: cid,
-            published: true,
+            published: false,
         };
         dispatch(updateQuiz(publishedQuiz));
         router.push(`/courses/${cid}/quizzes`);
