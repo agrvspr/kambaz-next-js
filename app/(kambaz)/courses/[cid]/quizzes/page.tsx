@@ -1,39 +1,23 @@
 "use client";
-
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { FaPlus, FaBan, FaCheckCircle } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
-import { Quiz, addQuiz, deleteQuiz, setQuizzes, updateQuiz } from "./reducer";
+import { Quiz, addQuiz, deleteQuiz, updateQuiz } from "./reducer";
 import QuizContextMenu from "./QuizContextMenu";
 import QuizAvailability from "./QuizAvailability";
 import { BsGripVertical } from "react-icons/bs";
-import { RootState } from "../../../store";
-import { findQuizzesForCourse } from "./client";
 
 export default function Quizzes() {
   const params = useParams();
-  
-    const { currentUser } = useSelector((state: RootState) => state.accountReducer);
-    const isFaculty = currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
+
   const cid =
     typeof params.cid === "string"
       ? params.cid
       : params.cid?.[0];
   const dispatch = useDispatch();
   const router = useRouter();
-
-    useEffect(() => {
-    const fetchQuizzes = async () => {
-      if (!cid) return;
-      const quizzes = await await findQuizzesForCourse(cid);
-      dispatch(setQuizzes(quizzes));
-    };
-
-    fetchQuizzes();
-  }, [cid, dispatch]);
 
   const quizzes = useSelector((state: any) =>
     (state.quizzesReducer?.quizzes ?? []).filter(
@@ -42,7 +26,7 @@ export default function Quizzes() {
   );
 
   const handleAddQuiz = () => {
-    if (!cid || !isFaculty) return;
+    if (!cid) return;
 
     const newQuiz: Quiz = {
       _id: uuidv4(),
