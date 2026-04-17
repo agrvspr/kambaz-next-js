@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useRouter } from "next/navigation";
 import { updateQuiz } from "../reducer";
 import QuizQuestions from "./quizQuestions";
+
+// button for the yes/no toggles
 function YesNoToggle({ value, onChange }) {
     return (
         <div style={{ display: "flex", border: "1px solid #ccc", borderRadius: 6, overflow: "hidden", width: "fit-content" }}>
@@ -34,6 +36,7 @@ function YesNoToggle({ value, onChange }) {
     );
 }
 
+//ease of use component for form fields
 function Field({
     label,
     optional,
@@ -54,6 +57,7 @@ function Field({
     );
 }
 
+//card container
 function Card({ title, children }) {
     return (
         <div style={{ border: "1px solid #ddd", padding: 16, borderRadius: 8, marginBottom: 20 }}>
